@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>Добавление пользователя</title>
+</head>
+<body>
+<div th:align="center">
+    <h1>Введите детали пользователя:</h1>
+    <br/>
+    <form th:action="@{/admin/save}" th:object="${newUser}" th:method="post">
+        <div>
+            <label for="firstName">Имя: </label>
+            <input type="text" th:field="*{firstName}" id="firstName"
+                   required minlength="4" maxlength="20"/>
+        </div>
+        <br/>
+        <div>
+            <label for="lastName">Фамилия: </label>
+            <input type="text" th:field="*{lastName}" id="lastName"
+                   required minlength="4" maxlength="20"/>
+        </div>
+        <br/>
+        <div>
+            <label for="email">Email: </label>
+            <input type="text" th:field="*{email}" id="email"
+                   required minlength="8" maxlength="254"/>
+        </div>
+        <br/>
+        <div>
+            <label for="city">Город: </label>
+            <input type="text" th:field="*{city}" id="city"
+                   required minlength="3" maxlength="20"/>
+        </div>
+        <br/>
+        <div>
+            <label for="username">Логин: </label>
+            <input type="text" th:field="*{username}" id="username"
+                   required minlength="4" maxlength="20"/>
+            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error:</div>
+        </div>
+        <br/>
+        <div>
+            <label for="password">Пароль: </label>
+            <input type="text" th:field="*{password}" id="password"
+                   required minlength="4" maxlength="10"/>
+        </div>
+        <br/>
+        <div>
+            <br/>
+            <label>Выберите роль: </label>
+            <ul>
+                <div th:each="role : ${allRoles}">
+                    <input type="checkbox" th:field="*{roles}" th:value="${role}"/>
+                    <label th:for="${#ids.prev('roles')}" th:text="${role.name}">Users Role</label>
+                    <div th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Roles error:</div>
+                </div>
+            </ul>
+        </div>
+        <br/>
+        <div>
+            <input type="submit" value="Save">
+        </div>
+    </form>
+</div>
+</body>
+</html>
