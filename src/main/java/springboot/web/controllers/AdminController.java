@@ -16,6 +16,8 @@ import javax.validation.Valid;
 @RequestMapping("/admin")
 public class AdminController {
 
+    private final String redirect = "redirect:/admin/users";
+
     private UserService userService;
     private RoleService roleService;
 
@@ -44,14 +46,15 @@ public class AdminController {
                              Model model) {
         if (!userService.isUsernameUnique(user.getUsername())) {
             addErrorIfExistsForField(result, model, "username", "User is already exists");
-            return "addUser";
+        }
+        if (user.getRoles().isEmpty()) {
+            addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
         }
         if (result.hasErrors()) {
-            addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
             return "addUser";
         }
         userService.addUser(user);
-        return "redirect:/admin/users";
+        return redirect;
     }
 
     @GetMapping("/{id}/edit")
@@ -67,21 +70,30 @@ public class AdminController {
                              BindingResult result,
                              Model model) {
         if (!userService.isUsernameUnique(user.getUsername())) {
+            if (userService.getUserById(id).getUsername().equals(user.getUsername())) {
+                if (user.getRoles().isEmpty()) {
+                    addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
+                    return "updateUser";
+                }
+                userService.updateUserWithoutUsername(id, user);
+                return redirect;
+            }
             addErrorIfExistsForField(result, model, "username", "User is already exists");
-            return "updateUser";
+        }
+        if (user.getRoles().isEmpty()) {
+            addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
         }
         if (result.hasErrors()) {
-            addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
             return "updateUser";
         }
         userService.updateUser(id, user);
-        return "redirect:/admin/users";
+        return redirect;
     }
 
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
-        return "redirect:/admin/users";
+        return redirect;
     }
 
     private void addErrorIfExistsForField(BindingResult result, Model model, String fieldName, String defaultMessage) {
