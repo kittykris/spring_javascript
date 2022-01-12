@@ -1,4 +1,4 @@
-package springboot.web.config.security.handlers;
+package springboot.web.config.handlers;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;

@@ -1,4 +1,4 @@
-package springboot.web.config.security;
+package springboot.web.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,8 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import springboot.web.config.security.handlers.CustomAccessDeniedHandler;
-import springboot.web.config.security.handlers.LoginSuccessHandler;
+import springboot.web.config.handlers.CustomAccessDeniedHandler;
+import springboot.web.config.handlers.LoginSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
