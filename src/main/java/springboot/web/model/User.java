@@ -30,7 +30,7 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 20)
     private String city;
 
-    @Column(nullable = false, length = 30, unique = true)
+    @Column(nullable = false, length = 30)
     private String username;
 
     @Column(nullable = false, length = 70)
