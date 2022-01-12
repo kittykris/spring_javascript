@@ -9,8 +9,8 @@
 <body>
 <br/>
 <div th:align="center">
-    <div>
-        <a th:href="@{/admin/users}"> Список пользователей (Только для ADMIN) </a>
+    <div class="row" th:if="${#request.isUserInRole('ADMIN')}">
+        <a th:href="@{/admin/users}"> Список пользователей </a>
     </div>
     <br/>
     <div>
