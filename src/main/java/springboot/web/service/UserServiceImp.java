@@ -42,6 +42,12 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public void updateUserWithoutUsername(long id, User user) {
+        user.setRoles(roleService.existingRoles(user));
+        userDao.updateUserWithoutUsername(id, user);
+    }
+
+    @Override
     public void deleteUser(long id) {
         userDao.deleteUser(id);
     }

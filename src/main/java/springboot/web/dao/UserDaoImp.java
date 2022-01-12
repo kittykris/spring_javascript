@@ -33,6 +33,18 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
+    public void updateUserWithoutUsername(long id, User user) {
+        User oldUser = entityManager.find(User.class, id);
+        oldUser.setFirstName(user.getFirstName());
+        oldUser.setLastName(user.getLastName());
+        oldUser.setCity(user.getCity());
+        oldUser.setEmail(user.getEmail());
+        oldUser.setPassword(user.getPassword());
+        oldUser.setRoles(user.getRoles());
+        entityManager.merge(oldUser);
+    }
+
+    @Override
     public void deleteUser(long id) {
         entityManager.remove(entityManager.find(User.class, id));
     }
