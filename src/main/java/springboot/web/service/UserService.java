@@ -20,4 +20,6 @@ public interface UserService extends UserDetailsService {
     List<User> userList();
 
     boolean isUsernameUnique(String userName);
+
+    void addDefaultUsers();
 }

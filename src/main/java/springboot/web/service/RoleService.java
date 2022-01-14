@@ -12,4 +12,6 @@ public interface RoleService {
     Role findRoleByName(String roleName);
 
     Set<Role> existingRoles(User user);
+
+    void addDefaultRoles();
 }

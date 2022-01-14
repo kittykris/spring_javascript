@@ -39,4 +39,10 @@ public class RoleServiceImp implements RoleService{
         });
         return roles;
     }
+
+    @Override
+    public void addDefaultRoles() {
+        roleDao.addRole(new Role("ROLE_USER"));
+        roleDao.addRole(new Role("ROLE_ADMIN"));
+    }
 }
