@@ -11,7 +11,7 @@ import java.security.Principal;
 @Controller
 public class UserController {
 
-	@GetMapping(value = {"/user", "/admin"})
+	@GetMapping(value = "/user")
 	public String userDetails(Model model, Principal principal) {
 		User loginedUser = (User) ((Authentication) principal).getPrincipal();
 		model.addAttribute("userDetails", loginedUser);
