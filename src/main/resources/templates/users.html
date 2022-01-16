@@ -7,24 +7,21 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <script src="webjars/jquery/3.0.0/jquery.min.js"></script>
+    <script src="webjars/jquery/3.4.1/jquery.js"></script>
     <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/js/main.js" th:src="@{/static/js/main.js}"></script>
+
     <title>Все пользователи</title>
 </head>
 <body>
+<div>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Log out"/>
+    </form>
+</div>
 
 <!-- All Users List -->
 <div th:align="center">
-    <br/>
-    <div>
-        <a th:href="@{/admin/new_add}">Добавить пользователя</a>
-    </div>
-    <br/>
-    <div>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Log out"/>
-        </form>
-    </div>
     <br/><br/>
     <div>
         <h2>Список пользователей</h2>
@@ -39,6 +36,7 @@
                 <th>Логин</th>
                 <!--                <th>Пароль</th>-->
                 <th>Роль</th>
+                <th>Edit</th>
             </tr>
             <tbody>
             <tr th:each="user: ${userList}">
@@ -50,9 +48,8 @@
                 <!--                <td th:text="${user.password}">Password</td>-->
                 <td th:text="${user.roles}">Roles</td>
                 <td>
-                    <form th:method="get" th:action="@{/admin/{id}/edit(id=${user.id})}">
-                        <input type="submit" th:value="Edit">
-                    </form>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" th:href="@{/admin/getuser/(id=${user.id})}" data-target="#editModal">Edit</button>
+<!--                    <a th:href="@{/admin/getuser/(id=${user.id})}" class="btn btn-info">Edit</a>-->
                 </td>
                 <td>
                     <form th:method="delete" th:action="@{/admin/{id}(id=${user.id})}">
@@ -116,7 +113,7 @@
                         <select id="addRole" name="roles" class="form-control" multiple>
                             <th:block th:each="role : ${allRoles}">
                                 <option>
-                                    <th:block th:text="${role.name}" />
+                                    <th:block th:text="${role.name}"/>
                                 </option>
                             </th:block>
                         </select>
@@ -133,6 +130,70 @@
 </div>
 
 <!-- Update-->
+<br/>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form th:action="@{/admin/update}" method="patch">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="editFirstName" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="editFirstName" name="firstName">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editLastName" class="col-form-label">Last name:</label>
+                        <input type="text" class="form-control" id="editLastName" name="lastName">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editEmail" class="col-form-label">Email:</label>
+                        <input type="text" class="form-control" id="editEmail" name="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editCity" class="col-form-label">City:</label>
+                        <input type="text" class="form-control" id="editCity" name="city">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editLogin" class="col-form-label">Login:</label>
+                        <input type="text" class="form-control" id="editLogin" name="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editPassword" class="col-form-label">Password:</label>
+                        <input type="text" class="form-control" id="editPassword" name="password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editRole">Select Role</label>
+                        <select id="editRole" name="roles" class="form-control" multiple>
+                            <th:block th:each="role : ${allRoles}">
+                                <option>
+                                    <th:block th:text="${role.name}"/>
+                                </option>
+                            </th:block>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 
 </body>
 </html>
