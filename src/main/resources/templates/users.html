@@ -2,9 +2,18 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="webjars/jquery/3.0.0/jquery.min.js"></script>
+    <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <title>Все пользователи</title>
 </head>
 <body>
+
+<!-- All Users List -->
 <div th:align="center">
     <br/>
     <div>
@@ -28,7 +37,7 @@
                 <th>Email</th>
                 <th>Город</th>
                 <th>Логин</th>
-<!--                <th>Пароль</th>-->
+                <!--                <th>Пароль</th>-->
                 <th>Роль</th>
             </tr>
             <tbody>
@@ -38,7 +47,7 @@
                 <td th:text="${user.email}">Email</td>
                 <td th:text="${user.city}">City</td>
                 <td th:text="${user.username}">Username</td>
-<!--                <td th:text="${user.password}">Password</td>-->
+                <!--                <td th:text="${user.password}">Password</td>-->
                 <td th:text="${user.roles}">Roles</td>
                 <td>
                     <form th:method="get" th:action="@{/admin/{id}/edit(id=${user.id})}">
@@ -55,6 +64,76 @@
         </table>
     </div>
 </div>
+
+<!-- Add -->
+<br/>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add</button>
+
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form th:action="@{/admin/save}" method="post">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addModalLabel">Add new User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="addFirstName" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="addFirstName" name="firstName">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="addLastName" class="col-form-label">Last name:</label>
+                        <input type="text" class="form-control" id="addLastName" name="lastName">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="addEmail" class="col-form-label">Email:</label>
+                        <input type="text" class="form-control" id="addEmail" name="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="addCity" class="col-form-label">City:</label>
+                        <input type="text" class="form-control" id="addCity" name="city">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="addLogin" class="col-form-label">Login:</label>
+                        <input type="text" class="form-control" id="addLogin" name="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="addPassword" class="col-form-label">Password:</label>
+                        <input type="text" class="form-control" id="addPassword" name="password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="addRole">Select (Multi Select)</label>
+                        <select id="addRole" name="roles" class="form-control" multiple>
+                            <th:block th:each="role : ${allRoles}">
+                                <option>
+                                    <th:block th:text="${role.name}" />
+                                </option>
+                            </th:block>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Update-->
+
 </body>
 </html>
 
