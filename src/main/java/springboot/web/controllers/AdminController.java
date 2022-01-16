@@ -54,28 +54,29 @@ public class AdminController {
         return redirect;
     }
 
-    @PatchMapping("/{id}")
+    @RequestMapping(value="/update", method = {RequestMethod.PATCH, RequestMethod.GET})
     public String updateUser(@PathVariable("id") long id,
-                              @Valid User user,
-                             BindingResult result,
-                             Model model) {
+                              @Valid User user) {
+//                             BindingResult result,
+//                             Model model) {
         if (!userService.isUsernameUnique(user.getUsername())) {
             if (userService.getUserById(id).getUsername().equals(user.getUsername())) {
-                if (user.getRoles().isEmpty()) {
-                    addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
-                    return "updateUser";
-                }
+//                if (user.getRoles().isEmpty()) {
+//                    addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
+//                    return "updateUser";
+//                }
                 userService.updateUserWithoutUsername(id, user);
                 return redirect;
             }
-            addErrorIfExistsForField(result, model, "username", "User is already exists");
         }
-        if (user.getRoles().isEmpty()) {
-            addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
-        }
-        if (result.hasErrors()) {
-            return "updateUser";
-        }
+//            addErrorIfExistsForField(result, model, "username", "User is already exists");
+//        }
+//        if (user.getRoles().isEmpty()) {
+//            addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
+//        }
+//        if (result.hasErrors()) {
+//            return "updateUser";
+//        }
         userService.updateUser(id, user);
         return redirect;
     }
@@ -86,7 +87,7 @@ public class AdminController {
         return redirect;
     }
 
-    @RequestMapping("/getUser")
+    @RequestMapping("/getuser")
     @ResponseBody
     public User getUser(Long id) {
         return userService.getUserById(id);
