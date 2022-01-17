@@ -4,12 +4,11 @@
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css">
 
-    <script src="webjars/jquery/3.4.1/jquery.js"></script>
+    <script src="webjars/jquery/3.4.1/jquery.min.js"></script>
     <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../static/js/main.js" th:src="@{/static/js/main.js}"></script>
+    <!--    <script type="text/javascript" src="../static/js/main.js" th:src="@{/static/js/main.js}"></script>-->
 
     <title>Все пользователи</title>
 </head>
@@ -34,9 +33,10 @@
                 <th>Email</th>
                 <th>Город</th>
                 <th>Логин</th>
-                <!--                <th>Пароль</th>-->
+                <th>Пароль</th>
                 <th>Роль</th>
                 <th>Edit</th>
+                <th>Delete</th>
             </tr>
             <tbody>
             <tr th:each="user: ${userList}">
@@ -45,16 +45,27 @@
                 <td th:text="${user.email}">Email</td>
                 <td th:text="${user.city}">City</td>
                 <td th:text="${user.username}">Username</td>
-                <!--                <td th:text="${user.password}">Password</td>-->
+                <td th:text="${user.password}">Password</td>
                 <td th:text="${user.roles}">Roles</td>
                 <td>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" th:href="@{/admin/getuser/(id=${user.id})}" data-target="#editModal">Edit</button>
-<!--                    <a th:href="@{/admin/getuser/(id=${user.id})}" class="btn btn-info">Edit</a>-->
+                    <a th:href="@{'/admin/edit/' + ${user.getId()}}" id="editLink" class="btn btn-info">Edit</a>
+                    <div class="modal fade" id="editModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                            </div>
+                        </div>
+                    </div>
                 </td>
                 <td>
-                    <form th:method="delete" th:action="@{/admin/{id}(id=${user.id})}">
-                        <input type="submit" th:value="Delete">
-                    </form>
+                    <a th:href="@{'/admin/delete/' + ${user.getId()}}" id="deleteLink" class="btn btn-danger">Delete</a>
+                    <div class="modal fade" id="deleteModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                            </div>
+                        </div>
+                    </div>
                 </td>
             </tr>
             </tbody>
@@ -62,138 +73,20 @@
     </div>
 </div>
 
-<!-- Add -->
-<br/>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add</button>
 
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <form th:action="@{/admin/save}" method="post">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addModalLabel">Add new User</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('table #editLink').on("click", function (e) {
+            e.preventDefault();
+            $("#editModal").modal("show").find(".modal-content").load($(this).attr("href"));
+        });
 
-                    <div class="form-group">
-                        <label for="addFirstName" class="col-form-label">Name:</label>
-                        <input type="text" class="form-control" id="addFirstName" name="firstName">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="addLastName" class="col-form-label">Last name:</label>
-                        <input type="text" class="form-control" id="addLastName" name="lastName">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="addEmail" class="col-form-label">Email:</label>
-                        <input type="text" class="form-control" id="addEmail" name="email">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="addCity" class="col-form-label">City:</label>
-                        <input type="text" class="form-control" id="addCity" name="city">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="addLogin" class="col-form-label">Login:</label>
-                        <input type="text" class="form-control" id="addLogin" name="username">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="addPassword" class="col-form-label">Password:</label>
-                        <input type="text" class="form-control" id="addPassword" name="password">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="addRole">Select (Multi Select)</label>
-                        <select id="addRole" name="roles" class="form-control" multiple>
-                            <th:block th:each="role : ${allRoles}">
-                                <option>
-                                    <th:block th:text="${role.name}"/>
-                                </option>
-                            </th:block>
-                        </select>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-<!-- Update-->
-<br/>
-
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <form th:action="@{/admin/update}" method="patch">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit User</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="form-group">
-                        <label for="editFirstName" class="col-form-label">Name:</label>
-                        <input type="text" class="form-control" id="editFirstName" name="firstName">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editLastName" class="col-form-label">Last name:</label>
-                        <input type="text" class="form-control" id="editLastName" name="lastName">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editEmail" class="col-form-label">Email:</label>
-                        <input type="text" class="form-control" id="editEmail" name="email">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editCity" class="col-form-label">City:</label>
-                        <input type="text" class="form-control" id="editCity" name="city">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editLogin" class="col-form-label">Login:</label>
-                        <input type="text" class="form-control" id="editLogin" name="username">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editPassword" class="col-form-label">Password:</label>
-                        <input type="text" class="form-control" id="editPassword" name="password">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="editRole">Select Role</label>
-                        <select id="editRole" name="roles" class="form-control" multiple>
-                            <th:block th:each="role : ${allRoles}">
-                                <option>
-                                    <th:block th:text="${role.name}"/>
-                                </option>
-                            </th:block>
-                        </select>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
+        $('table #deleteLink').on("click", function (e) {
+            e.preventDefault();
+            $("#deleteModal").modal("show").find(".modal-content").load($(this).attr("href"));
+        });
+    });
+</script>
 
 </body>
 </html>
