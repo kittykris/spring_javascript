@@ -92,14 +92,14 @@ public class AdminController {
         return redirect;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/delete/{id}")
     public String showDeleteModal(@PathVariable("id") long id, Model model) {
         model.addAttribute("deleteUser", userService.getUserById(id));
         model.addAttribute("allRoles", roleService.allRoles());
         return "deleteUserModal";
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
         return redirect;
