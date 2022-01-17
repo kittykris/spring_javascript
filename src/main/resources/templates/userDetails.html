@@ -4,44 +4,80 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <script src="webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+    </style>
+
     <title>Добро пожаловать</title>
+
 </head>
 <body>
-<br/>
-<div th:align="center">
-    <div class="row" th:if="${#request.isUserInRole('ADMIN')}">
-        <a th:href="@{/admin/users}"> Список пользователей </a>
-    </div>
-    <br/>
-    <div>
-        <h1>Мои детали</h1>
-    </div>
-    <br/>
-    <div>
-        <table th:border="1" th:cellpadding="15">
-            <tr>
-                <th>Имя:</th>
-                <th>Фамилия:</th>
-                <th>Email:</th>
-                <th>Город:</th>
-                <th>Логин:</th>
-            </tr>
-            <tbody>
-            <td th:text="${userDetails.firstName}">First Name:</td>
-            <td th:text="${userDetails.lastName}">Last Name</td>
-            <td th:text="${userDetails.email}">Email</td>
-            <td th:text="${userDetails.city}">City</td>
-            <td th:text="${userDetails.username}">Username</td>
-            </tbody>
-        </table>
-    </div>
-    <br/><br/>
-    <div>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Log out"/>
-        </form>
-    </div>
 
+<!-- строка заголовка и logout -->
+<div>
+    <div class="p-2 mb-2 bg-dark text-white">
+        <div class="d-flex justify-content-between">
+            <div class="h7">
+                <span class="h6" th:text="${userDetails.getUsername()}">Login</span>
+                <span th:text="' with roles: '"> with roles </span>
+                <span th:each="role : ${userDetails.getAuthorities()}"
+                      th:text="${role.getAuthority()} + ' '"> Roles </span>
+            </div>
+            <div>
+                    <span class="text-right h11">
+                        <a th:href="@{/logout}" class="text-muted"> Logout </a>
+                    </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Panel with buttons -->
+        <div class="col-lg-2">
+
+        </div>
+
+        <!-- User information -->
+        <div class="col-lg-10 flex-lg-fill">
+            <p class="bold h1 p-2">User information-page</p>
+            <div class="card">
+                <div class="card-header">About user</div>
+                <div class="card-body p-3">
+                    <table class="table table-striped">
+                        <caption>Мои детали</caption>
+                        <tr>
+                            <thead>
+                            <th>Имя:</th>
+                            <th>Фамилия:</th>
+                            <th>Email:</th>
+                            <th>Город:</th>
+                            <th>Логин:</th>
+                            </thead>
+                        </tr>
+                        <tbody>
+                        <td th:text="${userDetails.firstName}">First Name:</td>
+                        <td th:text="${userDetails.lastName}">Last Name</td>
+                        <td th:text="${userDetails.email}">Email</td>
+                        <td th:text="${userDetails.city}">City</td>
+                        <td th:text="${userDetails.username}">Username</td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
