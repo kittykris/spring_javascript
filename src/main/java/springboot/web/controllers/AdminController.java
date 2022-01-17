@@ -33,64 +33,76 @@ public class AdminController {
     @GetMapping
     public String usersList(Model model) {
         model.addAttribute("userList", userService.userList());
-        model.addAttribute("allRoles", roleService.allRoles());
         return "users";
     }
 
+    @GetMapping("/new_add")
+    public String viewNewUser(Model model) {
+        model.addAttribute("newUser", new User());
+        return "addUser";
+    }
+
     @PostMapping("/save")
-    public String addNewUser(@Valid User user) {
-//                             BindingResult result,
-//                             Model model) {
-//        if (!userService.isUsernameUnique(user.getUsername())) {
-//            addErrorIfExistsForField(result, model, "username", "User is already exists");
-//        }
-//        if (user.getRoles().isEmpty()) {
-//            addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
-//        }
-//        if (result.hasErrors()) {
-//            return "addUser";
-//        }
+    public String addNewUser(@ModelAttribute("newUser") @Valid User user,
+                             BindingResult result,
+                             Model model) {
+        if (!userService.isUsernameUnique(user.getUsername())) {
+            addErrorIfExistsForField(result, model, "username", "User is already exists");
+        }
+        if (user.getRoles().isEmpty()) {
+            addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
+        }
+        if (result.hasErrors()) {
+            return "addUser";
+        }
         userService.addUser(user);
         return redirect;
     }
 
-    @RequestMapping(value="/update", method = {RequestMethod.PATCH, RequestMethod.GET})
+    @GetMapping("/edit/{id}")
+    public String showEditModal(@PathVariable("id") long id, Model model) {
+        model.addAttribute("updateUser", userService.getUserById(id));
+        model.addAttribute("allRoles", roleService.allRoles());
+        return "updateUserModal";
+    }
+
+    @PatchMapping("/{id}")
     public String updateUser(@PathVariable("id") long id,
-                              @Valid User user) {
-//                             BindingResult result,
-//                             Model model) {
+                             @ModelAttribute("updateUser") @Valid User user,
+                             BindingResult result,
+                             Model model) {
         if (!userService.isUsernameUnique(user.getUsername())) {
             if (userService.getUserById(id).getUsername().equals(user.getUsername())) {
-//                if (user.getRoles().isEmpty()) {
-//                    addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
-//                    return "updateUser";
-//                }
+                if (user.getRoles().isEmpty()) {
+                    addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
+                    return "updateUserModal";
+                }
                 userService.updateUserWithoutUsername(id, user);
                 return redirect;
             }
+            addErrorIfExistsForField(result, model, "username", "User is already exists");
         }
-//            addErrorIfExistsForField(result, model, "username", "User is already exists");
-//        }
-//        if (user.getRoles().isEmpty()) {
-//            addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
-//        }
-//        if (result.hasErrors()) {
-//            return "updateUser";
-//        }
+        if (user.getRoles().isEmpty()) {
+            addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
+        }
+        if (result.hasErrors()) {
+            return "updateUserModal";
+        }
         userService.updateUser(id, user);
         return redirect;
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/{id}")
+    public String showDeleteModal(@PathVariable("id") long id, Model model) {
+        model.addAttribute("deleteUser", userService.getUserById(id));
+        model.addAttribute("allRoles", roleService.allRoles());
+        return "deleteUserModal";
+    }
+
+    @DeleteMapping("/delete/{id}")
     public String deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
         return redirect;
-    }
-
-    @RequestMapping("/getuser")
-    @ResponseBody
-    public User getUser(Long id) {
-        return userService.getUserById(id);
     }
 
     private void addErrorIfExistsForField(BindingResult result, Model model, String fieldName, String defaultMessage) {
