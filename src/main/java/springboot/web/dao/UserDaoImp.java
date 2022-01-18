@@ -37,8 +37,7 @@ public class UserDaoImp implements UserDao {
         User oldUser = entityManager.find(User.class, id);
         oldUser.setFirstName(user.getFirstName());
         oldUser.setLastName(user.getLastName());
-        oldUser.setCity(user.getCity());
-        oldUser.setEmail(user.getEmail());
+        oldUser.setAge(user.getAge());
         oldUser.setPassword(user.getPassword());
         oldUser.setRoles(user.getRoles());
         entityManager.merge(oldUser);
@@ -60,7 +59,7 @@ public class UserDaoImp implements UserDao {
         User user;
         try {
             user = entityManager
-                    .createQuery("select u from User u where u.username =: userName", User.class)
+                    .createQuery("select u from User u where u.email =: userName", User.class)
                     .setParameter("userName", login).getSingleResult();
         } catch (NoResultException nre) {
             user = null;

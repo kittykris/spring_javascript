@@ -62,8 +62,8 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User user = userDao.getUserByLogin(login);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userDao.getUserByLogin(email);
         if (user == null) {
             throw new UsernameNotFoundException("There no user with this username found");
         }
@@ -71,9 +71,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean isUsernameUnique(String userName) {
+    public boolean isUsernameUnique(String email) {
         boolean unique = true;
-        if (userDao.getUserByLogin(userName) != null) {
+        if (userDao.getUserByLogin(email) != null) {
             unique = false;
         }
         return unique;
@@ -81,17 +81,17 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void addDefaultUsers() {
-        User user = new User("user", "user", "user", "user", "user", passwordEncoder.encode("user"));
+        User user = new User("user", "user", (byte) 25, "user", passwordEncoder.encode("user"));
         Set<Role> userSet = new HashSet<>();
         userSet.add(roleService.findRoleByName("ROLE_USER"));
         user.setRoles(userSet);
         userDao.addUser(user);
-        User admin = new User("admin", "admin", "admin", "admin", "admin", passwordEncoder.encode("admin"));
+        User admin = new User("admin", "admin", (byte) 25, "admin", passwordEncoder.encode("admin"));
         Set<Role> adminSet = new HashSet<>();
         adminSet.add(roleService.findRoleByName("ROLE_ADMIN"));
         admin.setRoles(adminSet);
         userDao.addUser(admin);
-        User admin1 = new User("admin", "admin", "admin", "admin", "admin1", passwordEncoder.encode("admin"));
+        User admin1 = new User("admin1", "admin1", (byte) 25, "admin1", passwordEncoder.encode("admin"));
         Set<Role> adminSet1 = new HashSet<>();
         adminSet1.add(roleService.findRoleByName("ROLE_ADMIN"));
         adminSet1.add(roleService.findRoleByName("ROLE_USER"));

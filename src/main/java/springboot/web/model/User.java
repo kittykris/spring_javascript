@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User implements UserDetails {
 
     @Id
@@ -24,14 +24,11 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 20)
     private String lastName;
 
+    @Column
+    private byte age;
+
     @Column(nullable = false, length = 254)
     private String email;
-
-    @Column(nullable = false, length = 20)
-    private String city;
-
-    @Column(nullable = false, length = 30)
-    private String username;
 
     @Column(nullable = false, length = 70)
     private String password;
@@ -47,21 +44,19 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String city, String username, String password) {
+    public User(String firstName, String lastName, byte age, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.age = age;
         this.email = email;
-        this.city = city;
-        this.username = username;
         this.password = password;
     }
 
-    public User(String firstName, String lastName, String email, String city, String username, String password, Set<Role> roles) {
+    public User(String firstName, String lastName, byte age, String email, String password, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.age = age;
         this.email = email;
-        this.city = city;
-        this.username = username;
         this.password = password;
         this.roles = roles;
     }
@@ -103,6 +98,14 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
+    public byte getAge() {
+        return age;
+    }
+
+    public void setAge(byte age) {
+        this.age = age;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -111,16 +114,8 @@ public class User implements UserDetails {
         this.email = age;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public void setUsername(String username) {
-        this.username = username;
+        this.email = username;
     }
 
     public void setPassword(String password) {
@@ -150,7 +145,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
@@ -179,8 +174,7 @@ public class User implements UserDetails {
                 "\nFirstName: " + firstName +
                 "\nLast Name: " + lastName +
                 "\nEmail: " + email +
-                "\nCity: " + city +
-                "\nUsername: " + username +
+                "\nAge: " + age +
                 "\nRoles: " + roles;
     }
 }
