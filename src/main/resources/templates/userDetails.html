@@ -18,12 +18,17 @@
         }
 
         .sidebar {
-            position: fixed;
             height: 100vh;
         }
 
         .custom {
             width: 182px !important;
+        }
+
+        .addContainer {
+            max-width: 330px;
+            padding: 16px;
+            margin: auto;
         }
     </style>
 
@@ -31,55 +36,53 @@
 
 </head>
 <body>
-
-<!-- строка заголовка и logout -->
 <div>
-    <div class="p-2 mb-2 bg-dark text-white">
-        <div class="d-flex justify-content-between">
-            <div class="h7">
-                <span class="h6" th:text="${userDetails.getUsername()}">Login</span>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item h6">
+                <span th:text="${userDetails.getUsername()}"><strong>Login</strong></span>
                 <span th:text="' with roles: '"> with roles </span>
                 <span th:each="role : ${userDetails.getAuthorities()}"
                       th:text="${role.getAuthority()} + ' '"> Roles </span>
-            </div>
-            <div>
-                    <span class="text-right h11">
-                        <a th:href="@{/logout}" class="text-muted"> Logout </a>
-                    </span>
-            </div>
-        </div>
-    </div>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a th:href="@{/logout}" class="text-muted h11"> Logout </a>
+            </li>
+        </ul>
+    </nav>
 </div>
-
+<!--  боковые кнопки -->
 <div class="container-fluid">
     <div class="row">
         <div class="col-2 bg-white sidebar p-0">
             <ul class="nav nav-pills btn-group-vertical" id="myPill" role="tablist">
-                    <li class="nav-item custom">
-                        <a class="nav-link active" id="tab-admin" data-toggle="tab"
-                           href="#content-admin"
-                           role="tab" aria-controls="content-bootstrap" aria-selected="true">
-                            Admin
-                        </a>
-                    </li>
+                <li class="nav-item custom">
+                    <a class="nav-link active" id="tab-admin" data-toggle="tab"
+                       href="#content-admin"
+                       role="tab" aria-controls="content-bootstrap" aria-selected="true">
+                        Admin
+                    </a>
+                </li>
 
-                    <li class="nav-item custom">
-                        <a class="nav-link" id="tab-user" data-toggle="tab"
-                           href="#content-user"
-                           role="tab" aria-controls="content-javascript" aria-selected="false">
-                            User
-                        </a>
-                    </li>
+                <li class="nav-item custom">
+                    <a class="nav-link" id="tab-user" data-toggle="tab"
+                       href="#content-user"
+                       role="tab" aria-controls="content-javascript" aria-selected="false">
+                        User
+                    </a>
+                </li>
             </ul>
         </div>
 
         <!-- Контент боковых кнопок -->
-        <div class="col-10 offset-2 tab-content" id="myPillContent">
+        <div class="col-10 offset-2 tab-content p-3" id="myPillContent">
 
             <!-- Контент боковой кнопки admin -->
             <div class="tab-pane fade show active" id="content-admin"
                  role="tabpanel" aria-labelledby="tab-admin">
-                <p class="bold h1 p-2">Admin panel</p>
+                <p class="bold h1">Admin panel</p>
                 <div class="tab-pane active" id="adminPanel">
 
                     <!-- Вкладки панели Админа -->
@@ -107,17 +110,17 @@
                         <div class="tab-pane fade show active" id="content-userList"
                              role="tabpanel" aria-labelledby="tab-usersList">
                             <div class="card">
-                                <div class="card-header">All users</div>
+                                <div class="card-header"><strong>All users</strong></div>
                                 <div class="card-body">
                                     <table class="table table-striped">
                                         <caption>Список пользователей</caption>
                                         <thead>
                                         <th scope="row">Id</th>
-                                        <th scope="row">Имя</th>
-                                        <th scope="row">Фамилия</th>
+                                        <th scope="row">First Name</th>
+                                        <th scope="row">Last Name</th>
                                         <th scope="row">Age</th>
                                         <th scope="row">Email</th>
-                                        <th scope="row">Роли</th>
+                                        <th scope="row">Role</th>
                                         <th scope="row">Edit</th>
                                         <th scope="row">Delete</th>
                                         </thead>
@@ -133,7 +136,8 @@
                                             </td>
                                             <!-- Edit Modal -->
                                             <td>
-                                                <a th:href="@{'/admin/edit/' + ${user.getId()}}" id="editLink" class="btn btn-info">Edit</a>
+                                                <a th:href="@{'/admin/edit/' + ${user.getId()}}" id="editLink"
+                                                   class="btn btn-info">Edit</a>
                                                 <div class="modal fade" id="editModal">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content"></div>
@@ -158,66 +162,64 @@
                         </div>
 
                         <!-- Form for adding new user -->
-                        <div class="tab-pane fade" id="content-newUser"
+                        <div class="tab-pane fade " id="content-newUser"
                              role="tabpanel" aria-labelledby="tab-newUser">
-
-                            <h1>Введите детали пользователя:</h1>
-                            <br/>
-                            <form th:action="@{/admin/save}" th:object="${newUser}" th:method="post">
-                                <div>
-                                    <label for="firstName">Имя: </label>
-                                    <input type="text" th:field="*{firstName}" id="firstName"
-                                           required minlength="4" maxlength="20"/>
+                            <div class="card">
+                                <div class="card-header"><strong>Add new user</strong></div>
+                                <div class="card-body col-md-6 col-md-offset-3 addContainer">
+                                    <form th:action="@{/admin/save}" th:object="${newUser}" th:method="post">
+                                        <div class="form-group">
+                                            <label class="small" for="firstName"><strong>First Name</strong></label>
+                                            <input type="text" class="form-control" th:field="*{firstName}"
+                                                   id="firstName"
+                                                   placeholder="First Name" required minlength="4" maxlength="20"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="lastName" class="small"><strong>Last Name</strong></label>
+                                            <input type="text" class="form-control" th:field="*{lastName}" id="lastName"
+                                                   placeholder="Last Name" required minlength="4" maxlength="20"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="age" class="small"><strong>Age</strong></label>
+                                            <input type="number" class="form-control" th:field="*{age}" id="age"
+                                                   placeholder="Age" required min="18" max="120"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email" class="small"><strong>Email</strong></label>
+                                            <input type="text" class="form-control" th:field="*{email}" id="email"
+                                                   placeholder="Email" required minlength="8" maxlength="254"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password" class="small"><strong>Password</strong></label>
+                                            <input type="text" class="form-control" th:field="*{password}" id="password"
+                                                   placeholder="Password" required minlength="4" maxlength="10"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="small"><strong>Role</strong></label>
+                                            <select id="editRole" name="roles" class="form-control" multiple>
+                                                <th:block th:each="role : ${allRoles}">
+                                                    <option>
+                                                        <th:block th:text="${role.name}"/>
+                                                    </option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                        <br/>
+                                        <div>
+                                            <input type="submit" class="btn btn-success" value="Add new user">
+                                        </div>
+                                    </form>
                                 </div>
-                                <br/>
-                                <div>
-                                    <label for="lastName">Фамилия: </label>
-                                    <input type="text" th:field="*{lastName}" id="lastName"
-                                           required minlength="4" maxlength="20"/>
-                                </div>
-                                <br/>
-                                <div>
-                                    <label for="age">Age: </label>
-                                    <input type="text" th:field="*{age}" id="age" required/>
-                                </div>
-                                <br/>
-                                <div>
-                                    <label for="email">Email: </label>
-                                    <input type="text" th:field="*{email}" id="email"
-                                           required minlength="8" maxlength="254"/>
-                                </div>
-                                <br/>
-                                <div>
-                                    <label for="password">Пароль: </label>
-                                    <input type="text" th:field="*{password}" id="password"
-                                           required minlength="4" maxlength="10"/>
-                                </div>
-                                <br/>
-                                <div>
-                                    <br/>
-                                    <label>Выберите роль: </label>
-                                    <select id="editRole" name="roles" class="form-control" multiple>
-                                        <th:block th:each="role : ${allRoles}">
-                                            <option>
-                                                <th:block th:text="${role.name}"/>
-                                            </option>
-                                        </th:block>
-                                    </select>
-                                </div>
-                                <br/>
-                                <div>
-                                    <input type="submit" value="Save">
-                                </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Контент боковой кнопки Юзера -->
-            <div class="tab-pane fade" id="content-user"
+            <div class="tab-pane fade p-3" id="content-user"
                  role="tabpanel" aria-labelledby="tab-user">
-                <p class="bold h1 p-2">User information-page</p>
+                <p class="bold h1">User information-page</p>
                 <div class="card">
                     <div class="card-header">About user</div>
                     <div class="card-body p-3">
