@@ -5,40 +5,35 @@
 <form th:action="@{/admin/{id}(id=${deleteUser.id})}" th:object="${deleteUser}" th:method="delete">
     <div class="modal-body">
         <div>
-            <label for="id">Id: </label>
+            <label for="id">ID</label>
             <input type="text" th:field="*{id}" id="id" disabled/>
         </div>
         <br/>
         <div>
-            <label for="firstName">Имя: </label>
+            <label for="firstName">First Name</label>
             <input type="text" th:field="*{firstName}" id="firstName" disabled/>
         </div>
         <br/>
         <div>
-            <label for="lastName">Фамилия: </label>
+            <label for="lastName">Last Name</label>
             <input type="text" th:field="*{lastName}" id="lastName" disabled/>
         </div>
         <br/>
         <div>
-            <label for="age">Age: </label>
+            <label for="age">Age</label>
             <input type="text" th:field="*{age}" id="age" disabled/>
         </div>
         <br/>
         <div>
-            <label for="email">Email: </label>
+            <label for="email">Email</label>
             <input type="text" th:field="*{email}" id="email" disabled/>
         </div>
         <br/>
         <div>
-            <label for="password">Пароль: </label>
-            <input type="text" th:field="*{password}" id="password"  disabled/>
-        </div>
-        <br/>
-        <div>
             <br/>
-            <label>Выберите роль: </label>
-            <select id="editRole" name="roles" class="form-control" multiple>
-                <th:block th:each="role : ${allRoles}" disabled>
+            <label>Role</label>
+            <select id="editRole" name="roles" class="form-control" th:size="${allRoles.size()}" disabled>
+                <th:block th:each="role : ${allRoles}">
                     <option>
                         <th:block th:text="${role.name}"/>
                     </option>
