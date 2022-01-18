@@ -34,10 +34,6 @@ public class UserController {
     @ModelAttribute
     public void usersList(Model model) {
         model.addAttribute("userList", userService.userList());
-    }
-
-    @ModelAttribute
-    public void viewNewUser(Model model) {
         model.addAttribute("newUser", new User());
         model.addAttribute("allRoles", roleService.allRoles());
     }
