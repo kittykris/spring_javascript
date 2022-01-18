@@ -112,22 +112,22 @@
                                     <table class="table table-striped">
                                         <caption>Список пользователей</caption>
                                         <thead>
+                                        <th scope="row">Id</th>
                                         <th scope="row">Имя</th>
                                         <th scope="row">Фамилия</th>
+                                        <th scope="row">Age</th>
                                         <th scope="row">Email</th>
-                                        <th scope="row">Город</th>
-                                        <th scope="row">Логин</th>
                                         <th scope="row">Роли</th>
                                         <th scope="row">Edit</th>
                                         <th scope="row">Delete</th>
                                         </thead>
                                         <tbody>
                                         <tr th:each="user: ${userList}">
+                                            <td th:text="${user.id}">Id</td>
                                             <td th:text="${user.firstName}">First Name</td>
                                             <td th:text="${user.lastName}">Last Name</td>
+                                            <td th:text="${user.age}">Age</td>
                                             <td th:text="${user.email}">Email</td>
-                                            <td th:text="${user.city}">City</td>
-                                            <td th:text="${user.username}">Username</td>
                                             <td>
                                                 <a th:each="role :${user.roles}" th:text="${role.name} + ' '">Roles</a>
                                             </td>
@@ -177,22 +177,14 @@
                                 </div>
                                 <br/>
                                 <div>
+                                    <label for="age">Age: </label>
+                                    <input type="text" th:field="*{age}" id="age" required/>
+                                </div>
+                                <br/>
+                                <div>
                                     <label for="email">Email: </label>
                                     <input type="text" th:field="*{email}" id="email"
                                            required minlength="8" maxlength="254"/>
-                                </div>
-                                <br/>
-                                <div>
-                                    <label for="city">Город: </label>
-                                    <input type="text" th:field="*{city}" id="city"
-                                           required minlength="3" maxlength="20"/>
-                                </div>
-                                <br/>
-                                <div>
-                                    <label for="username">Логин: </label>
-                                    <input type="text" th:field="*{username}" id="username"
-                                           required minlength="4" maxlength="20"/>
-                                    <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username error:</div>
                                 </div>
                                 <br/>
                                 <div>
@@ -218,7 +210,6 @@
                                 </div>
                             </form>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -234,19 +225,19 @@
                             <caption>Мои детали</caption>
                             <tr>
                                 <thead>
-                                <th>Имя:</th>
-                                <th>Фамилия:</th>
-                                <th>Email:</th>
-                                <th>Город:</th>
-                                <th>Логин:</th>
+                                <th scope="row">Id:</th>
+                                <th scope="row">Имя:</th>
+                                <th scope="row">Фамилия:</th>
+                                <th scope="row">Age:</th>
+                                <th scope="row">Email:</th>
                                 </thead>
                             </tr>
                             <tbody>
+                            <td th:text="${userDetails.id}">Id:</td>
                             <td th:text="${userDetails.firstName}">First Name:</td>
                             <td th:text="${userDetails.lastName}">Last Name</td>
+                            <td th:text="${userDetails.age}">Age</td>
                             <td th:text="${userDetails.email}">Email</td>
-                            <td th:text="${userDetails.city}">City</td>
-                            <td th:text="${userDetails.username}">Username</td>
                             </tbody>
                         </table>
                     </div>

@@ -5,6 +5,11 @@
 <form th:action="@{/admin/{id}(id=${deleteUser.id})}" th:object="${deleteUser}" th:method="delete">
     <div class="modal-body">
         <div>
+            <label for="id">Id: </label>
+            <input type="text" th:field="*{id}" id="id" disabled/>
+        </div>
+        <br/>
+        <div>
             <label for="firstName">Имя: </label>
             <input type="text" th:field="*{firstName}" id="firstName" disabled/>
         </div>
@@ -15,18 +20,13 @@
         </div>
         <br/>
         <div>
+            <label for="age">Age: </label>
+            <input type="text" th:field="*{age}" id="age" disabled/>
+        </div>
+        <br/>
+        <div>
             <label for="email">Email: </label>
             <input type="text" th:field="*{email}" id="email" disabled/>
-        </div>
-        <br/>
-        <div>
-            <label for="city">Город: </label>
-            <input type="text" th:field="*{city}" id="city" disabled/>
-        </div>
-        <br/>
-        <div>
-            <label for="username">Логин: </label>
-            <input type="text" th:field="*{username}" id="username" disabled/>
         </div>
         <br/>
         <div>
@@ -48,6 +48,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Delete</button>
+        <button type="submit" class="btn btn-danger">Delete</button>
     </div>
 </form>

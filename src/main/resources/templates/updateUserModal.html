@@ -5,6 +5,11 @@
 <form th:action="@{/admin/{id}(id=${updateUser.id})}" th:object="${updateUser}" th:method="patch">
     <div class="modal-body">
         <div>
+            <label for="id">Id: </label>
+            <input type="text" th:field="*{id}" id="id" disabled/>
+        </div>
+        <br/>
+        <div>
             <label for="firstName">Имя: </label>
             <input type="text" th:field="*{firstName}" id="firstName"
                    required minlength="2" maxlength="20"/>
@@ -17,27 +22,20 @@
         </div>
         <br/>
         <div>
+            <label for="age">Age: </label>
+            <input type="text" th:field="*{age}" id="age"
+                   required minlength="2" maxlength="20"/>
+        </div>
+        <br/>
+        <div>
             <label for="email">Email: </label>
             <input type="text" th:field="*{email}" id="email"
                    required minlength="8" maxlength="254"/>
         </div>
         <br/>
         <div>
-            <label for="city">Город: </label>
-            <input type="text" th:field="*{city}" id="city"
-                   required minlength="2" maxlength="20"/>
-        </div>
-        <br/>
-        <div>
-            <label for="username">Логин: </label>
-            <input type="text" th:field="*{username}" id="username"
-                   required minlength="2" maxlength="20"/>
-            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Login error:</div>
-        </div>
-        <br/>
-        <div>
             <label for="password">Пароль: </label>
-            <input type="text" th:field="*{password}" id="password" readonly/>
+            <input type="text" th:field="*{password}" id="password"/>
         </div>
         <br/>
         <div>
