@@ -42,7 +42,7 @@ public class RoleServiceImp implements RoleService{
 
     @Override
     public void addDefaultRoles() {
-        roleDao.addRole(new Role("ROLE_USER"));
-        roleDao.addRole(new Role("ROLE_ADMIN"));
+        roleDao.addRole(new Role("USER"));
+        roleDao.addRole(new Role("ADMIN"));
     }
 }

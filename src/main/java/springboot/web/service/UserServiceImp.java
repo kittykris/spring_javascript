@@ -83,18 +83,18 @@ public class UserServiceImp implements UserService {
     public void addDefaultUsers() {
         User user = new User("user", "user", (byte) 25, "user", passwordEncoder.encode("user"));
         Set<Role> userSet = new HashSet<>();
-        userSet.add(roleService.findRoleByName("ROLE_USER"));
+        userSet.add(roleService.findRoleByName("USER"));
         user.setRoles(userSet);
         userDao.addUser(user);
         User admin = new User("admin", "admin", (byte) 25, "admin", passwordEncoder.encode("admin"));
         Set<Role> adminSet = new HashSet<>();
-        adminSet.add(roleService.findRoleByName("ROLE_ADMIN"));
+        adminSet.add(roleService.findRoleByName("ADMIN"));
         admin.setRoles(adminSet);
         userDao.addUser(admin);
         User admin1 = new User("admin1", "admin1", (byte) 25, "admin1", passwordEncoder.encode("admin"));
         Set<Role> adminSet1 = new HashSet<>();
-        adminSet1.add(roleService.findRoleByName("ROLE_ADMIN"));
-        adminSet1.add(roleService.findRoleByName("ROLE_USER"));
+        adminSet1.add(roleService.findRoleByName("ADMIN"));
+        adminSet1.add(roleService.findRoleByName("USER"));
         admin1.setRoles(adminSet1);
         userDao.addUser(admin1);
     }
