@@ -2,8 +2,8 @@
     <h4 class="modal-title" id="modalDeleteTitle">Delete User</h4>
     <button type="button" class="close" data-dismiss="modal">&times;</button>
 </div>
-<form class="myContainer" th:action="@{/admin/{id}(id=${deleteUser.id})}" th:object="${deleteUser}" th:method="delete">
-    <div class="modal-body">
+<form th:action="@{/admin/{id}(id=${deleteUser.id})}" th:object="${deleteUser}" th:method="delete">
+    <div class="modal-body myContainer p-3">
         <div class="form-group">
             <label class="small text" for="id"><strong>ID</strong></label>
             <input type="text" class="form-control" th:field="*{id}" id="id" disabled/>
