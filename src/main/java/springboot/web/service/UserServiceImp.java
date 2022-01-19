@@ -46,12 +46,6 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void updateUserWithoutUsername(long id, User user) {
-        user.setRoles(roleService.existingRoles(user));
-        userDao.updateUserWithoutUsername(id, user);
-    }
-
-    @Override
     public void deleteUser(long id) {
         userDao.deleteUser(id);
     }
@@ -91,11 +85,5 @@ public class UserServiceImp implements UserService {
         adminSet.add(roleService.findRoleByName("ADMIN"));
         admin.setRoles(adminSet);
         userDao.addUser(admin);
-        User admin1 = new User("admin1", "admin1", (byte) 25, "admin1", passwordEncoder.encode("admin"));
-        Set<Role> adminSet1 = new HashSet<>();
-        adminSet1.add(roleService.findRoleByName("ADMIN"));
-        adminSet1.add(roleService.findRoleByName("USER"));
-        admin1.setRoles(adminSet1);
-        userDao.addUser(admin1);
     }
 }

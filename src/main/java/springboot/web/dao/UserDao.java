@@ -12,8 +12,6 @@ public interface UserDao {
 
     void updateUser(long id, User user);
 
-    void updateUserWithoutUsername(long id, User user);
-
     void deleteUser(long id);
 
     List<User> userList();
