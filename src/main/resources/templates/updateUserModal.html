@@ -2,46 +2,39 @@
     <h4 class="modal-title" id="modalEditTitle">Edit User</h4>
     <button type="button" class="close" data-dismiss="modal">&times;</button>
 </div>
-<form th:action="@{/admin/{id}(id=${updateUser.id})}" th:object="${updateUser}" th:method="patch">
+<form class="myContainer" th:action="@{/admin/{id}(id=${updateUser.id})}" th:object="${updateUser}" th:method="patch">
     <div class="modal-body p-3">
-        <div>
-            <label for="id">ID</label>
-            <input type="text" th:field="*{id}" id="id" disabled/>
+        <div class="form-group">
+            <label class="small text" for="id"><strong>ID</strong></label>
+            <input type="text" class="form-control" th:field="*{id}" id="id" disabled/>
         </div>
-        <br/>
-        <div>
-            <label for="firstName">First Name</label>
-            <input type="text" th:field="*{firstName}" id="firstName"
+        <div class="form-group">
+            <label class="small text" for="firstName"><strong>First Name</strong></label>
+            <input type="text" class="form-control" th:field="*{firstName}" id="firstName"
                    required minlength="2" maxlength="20"/>
         </div>
-        <br/>
-        <div>
-            <label for="lastName">Last Name</label>
-            <input type="text" th:field="*{lastName}" id="lastName"
+        <div class="form-group">
+            <label class="small text" for="lastName"><strong>Last Name</strong></label>
+            <input type="text" class="form-control" th:field="*{lastName}" id="lastName"
                    required minlength="2" maxlength="20"/>
         </div>
-        <br/>
-        <div>
-            <label for="age">Age</label>
+        <div class="form-group">
+            <label class="small text" for="age"><strong>Age</strong></label>
             <input type="number" class="form-control" th:field="*{age}" id="age"
                    min="18" max="120" required />
         </div>
-        <br/>
-        <div>
-            <label for="email">Email</label>
+        <div class="form-group">
+            <label class="small text" for="email"><strong>Email</strong></label>
             <input type="email" class="form-control" th:field="*{email}" id="email"
                    required minlength="8" maxlength="254"/>
         </div>
-        <br/>
         <div>
-            <label for="password">Password</label>
-            <input type="text" class="form-control" th:field="*{password}" id="password" readonly/>
+            <label class="small text" for="password"><strong>Password</strong></label>
+            <input type="text" class="form-control" th:field="*{password}" id="password" />
         </div>
-        <br/>
-        <div>
-            <br/>
-            <label>ВRole</label>
-            <select id="editRole" name="roles" class="form-control" th:size="${allRoles.size()}">
+        <div class="form-group">
+            <label class="small text"><strong>Role</strong></label>
+            <select id="editRole" name="roles" class="form-control" th:size="${allRoles.size()}" required>
                 <th:block th:each="role : ${allRoles}">
                     <option>
                         <th:block th:text="${role.name}"/>
@@ -50,7 +43,7 @@
             </select>
         </div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer text-center">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary">Update</button>
     </div>

@@ -21,14 +21,21 @@
             height: 100vh;
         }
 
-        /*.custom {*/
-        /*    width: 182px !important;*/
-        /*}*/
+        .custom {
+            width: 100% !important;
+        }
 
-        .addContainer {
+        .myContainer {
             max-width: 330px;
-            padding: 16px;
+            padding: 10px;
             margin: auto;
+        }
+        .form-group {
+            text-align: center;
+            margin: 0 auto;
+        }
+        .text {
+            margin: 0 auto;
         }
     </style>
 
@@ -36,11 +43,13 @@
 
 </head>
 <body>
+
+<!-- Nav bar -->
 <div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item h6">
-                <span th:text="${userDetails.getUsername()}"><strong>Login</strong></span>
+                <strong><span th:text="${userDetails.getUsername()}">Login</span></strong>
                 <span th:text="' with roles: '"> with roles </span>
                 <span th:each="role : ${userDetails.getAuthorities()}"
                       th:text="${role.getAuthority()} + ' '"> Roles </span>
@@ -58,7 +67,7 @@
     <div class="row">
         <div class="col-2 bg-white sidebar p-0">
             <ul class="nav nav-pills btn-group-vertical" id="myPill" role="tablist">
-                <li class="nav-item">
+                <li class="nav-item custom">
                     <a class="nav-link active" id="tab-admin" data-toggle="tab"
                        href="#content-admin"
                        role="tab" aria-controls="content-bootstrap" aria-selected="true">
@@ -66,7 +75,7 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
+                <li class="nav-item custom">
                     <a class="nav-link" id="tab-user" data-toggle="tab"
                        href="#content-user"
                        role="tab" aria-controls="content-javascript" aria-selected="false">
@@ -166,39 +175,39 @@
                                  role="tabpanel" aria-labelledby="tab-newUser">
                                 <div class="card">
                                     <div class="card-header"><strong>Add new user</strong></div>
-                                    <div class="card-body col-md-6 col-md-offset-3 addContainer">
+                                    <div class="card-body col-md-6 col-md-offset-3 myContainer">
                                         <form th:action="@{/admin/save}" th:object="${newUser}" th:method="post">
                                             <div class="form-group">
-                                                <label class="small" for="firstName"><strong>First Name</strong></label>
+                                                <label class="small text" for="firstName"><strong>First Name</strong></label>
                                                 <input type="text" class="form-control" th:field="*{firstName}"
                                                        id="firstName"
                                                        placeholder="First Name" required minlength="4" maxlength="20"/>
                                             </div>
                                             <div class="form-group">
-                                                <label for="lastName" class="small"><strong>Last Name</strong></label>
+                                                <label for="lastName" class="small text"><strong>Last Name</strong></label>
                                                 <input type="text" class="form-control" th:field="*{lastName}"
                                                        id="lastName"
                                                        placeholder="Last Name" required minlength="4" maxlength="20"/>
                                             </div>
                                             <div class="form-group">
-                                                <label for="age" class="small"><strong>Age</strong></label>
+                                                <label for="age" class="small text"><strong>Age</strong></label>
                                                 <input type="number" class="form-control" th:field="*{age}" id="age"
                                                        placeholder="Age" required min="18" max="120"/>
                                             </div>
                                             <div class="form-group">
-                                                <label for="email" class="small"><strong>Email</strong></label>
-                                                <input type="text" class="form-control" th:field="*{email}" id="email"
+                                                <label for="email" class="small text"><strong>Email</strong></label>
+                                                <input type="email" class="form-control" th:field="*{email}" id="email" name="email"
                                                        placeholder="Email" required minlength="8" maxlength="254"/>
                                             </div>
                                             <div class="form-group">
-                                                <label for="password" class="small"><strong>Password</strong></label>
+                                                <label for="password" class="small text"><strong>Password</strong></label>
                                                 <input type="text" class="form-control" th:field="*{password}"
                                                        id="password"
                                                        placeholder="Password" required minlength="4" maxlength="10"/>
                                             </div>
                                             <div class="form-group">
-                                                <label class="small"><strong>Role</strong></label>
-                                                <select id="editRole" name="roles" class="form-control" multiple>
+                                                <label class="small text"><strong>Role</strong></label>
+                                                <select id="editRole" name="roles" class="form-control" th:size="${allRoles.size()}" required>
                                                     <th:block th:each="role : ${allRoles}">
                                                         <option>
                                                             <th:block th:text="${role.name}"/>
@@ -207,8 +216,8 @@
                                                 </select>
                                             </div>
                                             <br/>
-                                            <div>
-                                                <input type="submit" class="btn btn-success" value="Add new user">
+                                            <div class="text-center">
+                                                <input type="submit" class="btn btn-success align-middle" value="Add new user">
                                             </div>
                                         </form>
                                     </div>
@@ -219,7 +228,7 @@
                 </div>
 
                 <!-- Контент боковой кнопки Юзера +++-->
-                <div class="tab-pane fade p-3" id="content-user"
+                <div class="tab-pane fade" id="content-user"
                      role="tabpanel" aria-labelledby="tab-user">
                     <p class="bold h1">User information-page</p>
                     <div class="card">
