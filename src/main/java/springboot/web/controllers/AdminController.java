@@ -1,6 +1,7 @@
 package springboot.web.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,7 +10,10 @@ import springboot.web.model.User;
 import springboot.web.service.RoleService;
 import springboot.web.service.UserService;
 
+import java.security.Principal;
+
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
 
     private final String redirect = "redirect:/admin";
@@ -23,7 +27,14 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    @PostMapping("/admin/save")
+    @GetMapping
+    public String adminDetails(Model model, Principal principal) {
+        User loginedUser = (User) ((Authentication) principal).getPrincipal();
+        model.addAttribute("adminDetails", loginedUser);
+        return "adminDetails";
+    }
+
+    @PostMapping("/save")
     public String addNewUser(User user, BindingResult result) {
         if (!userService.isUsernameUnique(user.getUsername())) {
             return redirect;
@@ -32,14 +43,14 @@ public class AdminController {
         return redirect;
     }
 
-    @GetMapping("/admin/edit/{id}")
+    @GetMapping("/edit/{id}")
     public String showEditModal(@PathVariable("id") long id, Model model) {
         model.addAttribute("updateUser", userService.getUserById(id));
         model.addAttribute("allRoles", roleService.allRoles());
         return "updateUserModal";
     }
 
-    @PatchMapping("/admin/{id}")
+    @PatchMapping("/{id}")
     public String updateUser(@PathVariable("id") long id,
                              @ModelAttribute("updateUser") User user) {
         if (!userService.isUsernameUnique(user.getUsername())) {
@@ -52,16 +63,23 @@ public class AdminController {
         return redirect;
     }
 
-    @GetMapping("/admin/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String showDeleteModal(@PathVariable("id") long id, Model model) {
         model.addAttribute("deleteUser", userService.getUserById(id));
         model.addAttribute("allRoles", roleService.allRoles());
         return "deleteUserModal";
     }
 
-    @DeleteMapping("/admin/{id}")
+    @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
         return redirect;
+    }
+
+    @ModelAttribute
+    public void usersList(Model model) {
+        model.addAttribute("userList", userService.userList());
+        model.addAttribute("newUser", new User());
+        model.addAttribute("allRoles", roleService.allRoles());
     }
 }
