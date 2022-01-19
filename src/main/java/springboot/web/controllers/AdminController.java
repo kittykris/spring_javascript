@@ -42,6 +42,9 @@ public class AdminController {
     @PatchMapping("/admin/{id}")
     public String updateUser(@PathVariable("id") long id,
                              @ModelAttribute("updateUser") User user) {
+        if (!userService.isUsernameUnique(user.getUsername())) {
+            return redirect;
+        }
         userService.updateUser(id, user);
         return redirect;
     }
