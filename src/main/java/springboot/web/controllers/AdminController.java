@@ -45,6 +45,9 @@ public class AdminController {
         if (!userService.isUsernameUnique(user.getUsername())) {
             return redirect;
         }
+        if (user.getPassword().isEmpty()) {
+            user.setPassword(userService.getUserById(id).getPassword());
+        }
         userService.updateUser(id, user);
         return redirect;
     }
