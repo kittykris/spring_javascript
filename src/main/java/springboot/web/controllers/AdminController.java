@@ -33,18 +33,10 @@ public class AdminController {
     }
 
     @PostMapping("/admin/save")
-    public String addNewUser(@Valid User user) {
-//                             BindingResult result,
-//                             Model model) {
-//        if (!userService.isUsernameUnique(user.getUsername())) {
-//            addErrorIfExistsForField(result, model, "username", "User is already exists");
-//        }
-//        if (user.getRoles().isEmpty()) {
-//            addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
-//        }
-//        if (result.hasErrors()) {
-//            return "addUser";
-//        }
+    public String addNewUser(User user, BindingResult result) {
+        if (!userService.isUsernameUnique(user.getUsername())) {
+            return redirect;
+        }
         userService.addUser(user);
         return redirect;
     }
@@ -58,26 +50,7 @@ public class AdminController {
 
     @PatchMapping("/admin/{id}")
     public String updateUser(@PathVariable("id") long id,
-                             @ModelAttribute("updateUser") @Valid User user,
-                             BindingResult result,
-                             Model model) {
-        if (!userService.isUsernameUnique(user.getUsername())) {
-            if (userService.getUserById(id).getUsername().equals(user.getUsername())) {
-                if (user.getRoles().isEmpty()) {
-                    addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
-                    return "updateUserModal";
-                }
-                userService.updateUserWithoutUsername(id, user);
-                return redirect;
-            }
-            addErrorIfExistsForField(result, model, "username", "User is already exists");
-        }
-        if (user.getRoles().isEmpty()) {
-            addErrorIfExistsForField(result, model, "roles", "Role must be not empty");
-        }
-        if (result.hasErrors()) {
-            return "updateUserModal";
-        }
+                             @ModelAttribute("updateUser") User user) {
         userService.updateUser(id, user);
         return redirect;
     }
@@ -94,10 +67,4 @@ public class AdminController {
         userService.deleteUser(id);
         return redirect;
     }
-
-    private void addErrorIfExistsForField(BindingResult result, Model model, String fieldName, String defaultMessage) {
-        result.addError(new FieldError(fieldName, fieldName, defaultMessage));
-        model.addAttribute("allRoles", roleService.allRoles());
-    }
-
 }
