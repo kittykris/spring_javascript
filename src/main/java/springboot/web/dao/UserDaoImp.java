@@ -6,11 +6,9 @@ import springboot.web.model.User;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-@Transactional
 public class UserDaoImp implements UserDao {
 
     @PersistenceContext
@@ -27,8 +25,7 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
-    public void updateUser(long id, User user) {
-        user.setId(id);
+    public void updateUser(User user) {
         entityManager.merge(user);
     }
 

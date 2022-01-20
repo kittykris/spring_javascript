@@ -9,11 +9,13 @@ import springboot.web.dao.UserDao;
 import springboot.web.model.Role;
 import springboot.web.model.User;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class UserServiceImp implements UserService {
 
     private UserDao userDao;
@@ -40,9 +42,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public void updateUser(long id, User user) {
+    public void updateUser(User user) {
         user.setRoles(roleService.existingRoles(user));
-        userDao.updateUser(id, user);
+        userDao.updateUser(user);
     }
 
     @Override
