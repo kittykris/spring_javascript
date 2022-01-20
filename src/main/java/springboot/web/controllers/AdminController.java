@@ -18,8 +18,8 @@ public class AdminController {
 
     private final String redirect = "redirect:/admin";
 
-    private UserService userService;
-    private RoleService roleService;
+    private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
     public AdminController(UserService userService, RoleService roleService) {
@@ -35,7 +35,7 @@ public class AdminController {
     }
 
     @PostMapping("/save")
-    public String addNewUser(User user, BindingResult result) {
+    public String addNewUser(User user) {
         if (!userService.isUsernameUnique(user.getUsername())) {
             return redirect;
         }
@@ -59,7 +59,8 @@ public class AdminController {
         if (user.getPassword().isEmpty()) {
             user.setPassword(userService.getUserById(id).getPassword());
         }
-        userService.updateUser(id, user);
+        user.setId(id);
+        userService.updateUser(user);
         return redirect;
     }
 
