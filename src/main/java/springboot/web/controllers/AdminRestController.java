@@ -21,8 +21,6 @@ public class AdminRestController {
     public AdminRestController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
-        this.roleService.addDefaultRoles();
-        this.userService.addDefaultUsers();
     }
 
     @GetMapping
