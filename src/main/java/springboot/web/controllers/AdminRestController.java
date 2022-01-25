@@ -5,12 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import springboot.web.model.Role;
 import springboot.web.model.User;
 import springboot.web.service.RoleService;
 import springboot.web.service.UserService;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/users")
@@ -43,6 +45,9 @@ public class AdminRestController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable("id") long id) {
+        if (user.getPassword() == null) {
+            user.setPassword(userService.getUserById(id).getPassword());
+        }
         user.setId(id);
         userService.updateUser(user);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -57,5 +62,10 @@ public class AdminRestController {
     @GetMapping("/details")
     public User getLoginedUser(Principal principal) {
         return (User) ((Authentication) principal).getPrincipal();
+    }
+
+    @GetMapping("/roles")
+    public Set<Role> allRoles() {
+        return roleService.allRoles();
     }
 }
