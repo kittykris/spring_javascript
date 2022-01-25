@@ -18,9 +18,9 @@ import java.util.Set;
 @Transactional
 public class UserServiceImp implements UserService {
 
-    private UserDao userDao;
-    private RoleService roleService;
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+    private final UserDao userDao;
+    private final RoleService roleService;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
     @Autowired
     public UserServiceImp(UserDao userDao, RoleService roleService) {
