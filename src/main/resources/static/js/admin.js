@@ -124,13 +124,13 @@ async function addNewUser() {
         }
         const response = await adminService.addNewUser(data);
         if (response.status === 201) {
-            let alert = `<div class="alert alert-success alert-dismissible fade show col-12" role="alert">
+            let alertSuccess = `<div class="alert alert-success alert-dismissible fade show col-12" role="alert">
                             User successfully saved!
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>`;
-            addNewUserForm.prepend(alert);
+            addNewUserForm.prepend(alertSuccess);
             addNewUserForm.find('#AddNewUserFirstName').val('');
             addNewUserForm.find('#AddNewUserLastName').val('');
             addNewUserForm.find('#AddNewUserAge').val('');
@@ -139,13 +139,13 @@ async function addNewUser() {
             addNewUserForm.find('#addRole').val();
             getTableWithAllUsers();
         } else {
-            let alert = `<div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
-                            Fields har errors!
+            let alertError = `<div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
+                            Fields has errors!
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>`;
-            addNewUserForm.prepend(alert)
+            addNewUserForm.prepend(alertError)
         }
     })
 }
@@ -176,21 +176,93 @@ async function getModal() {
 }
 
 async function editUser(modal, id) {
-    let preuser = await adminService.findOneUser(id);
-    let userJson = preuser.json();
+    let defaultUser = await adminService.findOneUser(id);
+    let userJson = defaultUser.json();
 
-    let prerole = await adminService.getRoleSet();
-    let roleJson = prerole.json();
+    let defaultRole = await adminService.getRoleSet();
+    let roleJson = defaultRole.json();
 
     modal.find('.modal-title').html('Edit user');
 
-    let editButton = `<button  class="btn btn-primary" id="editButton">Edit</button>`;
-    let closeButton = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`
     modal.find('.modal-footer').append(closeButton);
     modal.find('.modal-footer').append(editButton);
 
     userJson.then(() => {
-        let bodyForm = `
+        modal.find('.modal-body').append(bodyEditForm);
+    })
+
+    fillModal(userJson, roleJson, modal);
+
+    $("#editButton").on('click', async () => {
+        let id = modal.find("#id").val();
+        let firstName = modal.find("#firstName").val();
+        let lastName = modal.find("#lastName").val();
+        let age = modal.find("#age").val();
+        let email = modal.find("#email").val();
+        let password = modal.find("#password").val();
+        let roles = modal.find('#role option:selected').val();
+        let data = {
+            id: id,
+            firstName: firstName,
+            lastName: lastName,
+            age: age,
+            email: email,
+            password: password,
+            roles: [{
+                name: roles
+            }]
+        }
+        const response = await adminService.updateUser(data, id);
+
+        if (response.status === 200) {
+            getTableWithAllUsers();
+            modal.modal('hide');
+        } else {
+            let alertError = `<div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
+                            Fields has errors!
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>`;
+            modal.find('.modal-body').prepend(alertError);
+        }
+    })
+}
+
+async function deleteUser(modal, id) {
+    let defaultUser = await adminService.findOneUser(id);
+    let userJson = defaultUser.json();
+
+    let defaultRole = await adminService.getRoleSet();
+    let roleJson = defaultRole.json();
+
+    modal.find('.modal-title').html('Delete user');
+
+    userJson.then(() => {
+        modal.find('.modal-body').append(bodyDeleteForm);
+    })
+
+    modal.find('.modal-footer').append(closeButton);
+    modal.find('.modal-footer').append(deleteButton);
+
+    fillModal(userJson, roleJson, modal);
+
+    $('#deleteButton').click(async function () {
+
+        const response = await adminService.deleteUser(id);
+
+        if (response.status === 204) {
+            getTableWithAllUsers();
+            modal.modal('hide');
+        }
+    })
+}
+
+let editButton = `<button  class="btn btn-primary" id="editButton">Edit</button>`;
+let closeButton = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`
+let deleteButton = `<button  class="btn btn-danger" id="deleteButton">Delete</button>`;
+
+let bodyEditForm = `
             <form class="form-group" id="editUser">
                 <label class="small text"><strong>ID</strong></label>
                 <input type="text" class="form-control" id="id" name="id" disabled/>
@@ -209,100 +281,40 @@ async function editUser(modal, id) {
                 <label class="small text"><strong>Password</strong></label>
                 <input class="form-control" type="password" id="password"/>
                 <label class="small text"><strong>Role</strong></label>
-                <select id="editRole" class="form-control" multiple required>
+                <select id="role" class="form-control" multiple required>
                 </select>
             </form>
         `;
-        modal.find('.modal-body').append(bodyForm);
-    })
 
-    userJson.then(user => {
+let bodyDeleteForm = `
+            <form class="form-group" id="deleteUser">
+                <label class="small text" for="id"><strong>ID</strong></label>
+                <input type="text" class="form-control" id="id" name="id" disabled>
+                <label class="small text" for="firstName"><strong>First Name</strong></label>
+                <input class="form-control" type="text" id="firstName" disabled>
+                <label class="small text" for="lastName"><strong>Last Name</strong></label>
+                <input class="form-control" type="text" id="lastName" disabled>
+                <label class="small text" for="age"><strong>Age</strong></label>
+                <input class="form-control" type="number" id="age" disabled>
+                <label class="small text" for="email"><strong>Email</strong></label>
+                <input class="form-control" type="email" id="email" disabled>
+                <label class="small text"><strong>Role</strong></label>
+                <select id="role" class="form-control" multiple disabled>
+                </select>
+            </form>
+        `;
+
+function fillModal(user, role, modal) {
+    user.then(user => {
         modal.find('#id').val(user.id);
         modal.find('#firstName').val(user.firstName);
         modal.find('#lastName').val(user.lastName);
         modal.find('#age').val(user.age);
         modal.find('#email').val(user.email);
-        roleJson.then(roles => {
+        role.then(roles => {
             roles.forEach(role => {
-                modal.find('#editRole').append(new Option(role.name, role.name));
+                modal.find('#role').append(new Option(role.name, role.name));
             });
         });
     });
-
-    $("#editButton").on('click', async () => {
-        let id = modal.find("#id").val();
-        let firstName = modal.find("#firstName").val();
-        let lastName = modal.find("#lastName").val();
-        let age = modal.find("#age").val();
-        let email = modal.find("#email").val();
-        let password = modal.find("#password").val();
-        let roles = modal.find('#editRole option:selected').val();
-        let data = {
-            id: id,
-            firstName: firstName,
-            lastName: lastName,
-            age: age,
-            email: email,
-            password: password,
-            roles: [{
-                name: roles
-            }]
-        }
-        const response = await adminService.updateUser(data, id);
-
-        if (response.status === 200) {
-            getTableWithAllUsers();
-            modal.modal('hide');
-        } else {
-            let alert = `<div class="alert alert-danger alert-dismissible fade show col-12" role="alert" id="sharaBaraMessageError">
-                            Fields has errors!
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>`;
-            modal.find('.modal-body').prepend(alert);
-        }
-    })
-}
-
-async function deleteUser(modal, id) {
-    let preuser = await adminService.findOneUser(id);
-    let user = preuser.json();
-
-    modal.find('.modal-title').html('Delete user');
-
-    user.then(user => {
-        let bodyForm = `
-            <form class="form-group" id="deleteUser">
-                <label class="small text" for="id"><strong>ID</strong></label>
-                <input type="text" class="form-control" id="id" name="id" value="${user.id}" disabled>
-                <label class="small text" for="firstName"><strong>First Name</strong></label>
-                <input class="form-control" type="text" id="firstName" value="${user.firstName}" disabled>
-                <label class="small text" for="lastName"><strong>Last Name</strong></label>
-                <input class="form-control" type="text" id="lastName" value="${user.lastName}" disabled>
-                <label class="small text" for="age"><strong>Age</strong></label>
-                <input class="form-control" type="number" id="age" value="${user.age}" disabled>
-                <label class="small text" for="email"><strong>Email</strong></label>
-                <input class="form-control" type="email" id="email" value="${user.email}" disabled>
-                <label class="small text" for="password"><strong>Password</strong></label>
-                <input class="form-control" type="password" id="password" disabled><br>
-            </form>
-        `;
-        modal.find('.modal-body').append(bodyForm);
-    })
-
-    let deleteButton = `<button  class="btn btn-danger" id="deleteButton">Delete</button>`;
-    let closeButton = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`
-    modal.find('.modal-footer').append(closeButton);
-    modal.find('.modal-footer').append(deleteButton);
-
-    $('#deleteButton').click(async function () {
-
-        const response = await adminService.deleteUser(id);
-
-        if (response.status === 204) {
-            getTableWithAllUsers();
-            modal.modal('hide');
-        }
-    })
 }
