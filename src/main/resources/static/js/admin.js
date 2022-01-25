@@ -1,8 +1,8 @@
 $(async function () {
-    await getTableWithUsers();
-    getDefaultModal();
+    await getTableWithAllUsers();
+    getModal();
     addNewUser();
-    loginedUserTable();
+    getLoginedUserTable();
 })
 
 
@@ -37,8 +37,8 @@ function getUsersExistedRoles(set) {
     return roleArray.join(' ')
 }
 
-async function getTableWithUsers() {
-    let table = $('#mainTableWithUsers tbody');
+async function getTableWithAllUsers() {
+    let table = $('#mainTable tbody');
     table.empty();
 
     await adminService.findAllUsers()
@@ -55,11 +55,11 @@ async function getTableWithUsers() {
                             <td>${getUsersExistedRoles(user.roles)}</td>  
                             <td>
                                 <input type="submit" data-userid="${user.id}" data-action="edit" class="btn btn-info" 
-                                data-toggle="modal" data-target="#someDefaultModal" value="Edit">
+                                data-toggle="modal" data-target="#defaultModal" value="Edit">
                             </td>
                             <td>
                                 <input type="submit" data-userid="${user.id}" data-action="delete" class="btn btn-danger" 
-                                data-toggle="modal" data-target="#someDefaultModal" value="Delete">
+                                data-toggle="modal" data-target="#defaultModal" value="Delete">
                             </td>
                         </tr>
                 )`;
@@ -67,8 +67,8 @@ async function getTableWithUsers() {
             })
         })
 
-    $("#mainTableWithUsers").find('input').on('click', (event) => {
-        let defaultModal = $('#someDefaultModal');
+    $("#mainTable").find('input').on('click', (event) => {
+        let defaultModal = $('#defaultModal');
 
         let targetButton = $(event.target);
         let buttonUserId = targetButton.attr('data-userid');
@@ -80,7 +80,7 @@ async function getTableWithUsers() {
     })
 }
 
-async function loginedUserTable() {
+async function getLoginedUserTable() {
 
     let table = $('#userTable tbody');
     table.empty();
@@ -105,13 +105,13 @@ async function loginedUserTable() {
 
 async function addNewUser() {
     $('#addNewUserButton').click(async () => {
-        let addUserForm = $('#defaultSomeForm')
-        let firstName = addUserForm.find('#AddNewUserFirstName').val();
-        let lastName = addUserForm.find('#AddNewUserLastName').val();
-        let age = addUserForm.find('#AddNewUserAge').val();
-        let email = addUserForm.find('#AddNewUserEmail').val();
-        let password = addUserForm.find('#AddNewUserPassword').val();
-        let roles = addUserForm.find('#addRole').val();
+        let addNewUserForm = $('#addForm')
+        let firstName = addNewUserForm.find('#AddNewUserFirstName').val();
+        let lastName = addNewUserForm.find('#AddNewUserLastName').val();
+        let age = addNewUserForm.find('#AddNewUserAge').val();
+        let email = addNewUserForm.find('#AddNewUserEmail').val();
+        let password = addNewUserForm.find('#AddNewUserPassword').val();
+        let roles = addNewUserForm.find('#addRole').val();
         let data = {
             firstName: firstName,
             lastName: lastName,
@@ -130,14 +130,14 @@ async function addNewUser() {
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>`;
-            addUserForm.prepend(alert);
-            addUserForm.find('#AddNewUserFirstName').val('');
-            addUserForm.find('#AddNewUserLastName').val('');
-            addUserForm.find('#AddNewUserAge').val('');
-            addUserForm.find('#AddNewUserEmail').val('');
-            addUserForm.find('#AddNewUserPassword').val('');
-            addUserForm.find('#addRole').val();
-            getTableWithUsers();
+            addNewUserForm.prepend(alert);
+            addNewUserForm.find('#AddNewUserFirstName').val('');
+            addNewUserForm.find('#AddNewUserLastName').val('');
+            addNewUserForm.find('#AddNewUserAge').val('');
+            addNewUserForm.find('#AddNewUserEmail').val('');
+            addNewUserForm.find('#AddNewUserPassword').val('');
+            addNewUserForm.find('#addRole').val();
+            getTableWithAllUsers();
         } else {
             let alert = `<div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
                             Fields har errors!
@@ -145,13 +145,13 @@ async function addNewUser() {
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>`;
-            addUserForm.prepend(alert)
+            addNewUserForm.prepend(alert)
         }
     })
 }
 
-async function getDefaultModal() {
-    $('#someDefaultModal').modal({
+async function getModal() {
+    $('#defaultModal').modal({
         keyboard: true,
         backdrop: "static",
         show: false
@@ -189,7 +189,7 @@ async function editUser(modal, id) {
     modal.find('.modal-footer').append(closeButton);
     modal.find('.modal-footer').append(editButton);
 
-    userJson.then(user => {
+    userJson.then(() => {
         let bodyForm = `
             <form class="form-group" id="editUser">
                 <label class="small text"><strong>ID</strong></label>
@@ -251,7 +251,7 @@ async function editUser(modal, id) {
         const response = await adminService.updateUser(data, id);
 
         if (response.status === 200) {
-            getTableWithUsers();
+            getTableWithAllUsers();
             modal.modal('hide');
         } else {
             let alert = `<div class="alert alert-danger alert-dismissible fade show col-12" role="alert" id="sharaBaraMessageError">
@@ -301,7 +301,7 @@ async function deleteUser(modal, id) {
         const response = await adminService.deleteUser(id);
 
         if (response.status === 204) {
-            getTableWithUsers();
+            getTableWithAllUsers();
             modal.modal('hide');
         }
     })
