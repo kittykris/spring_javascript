@@ -1,0 +1,31 @@
+body {
+    margin: 0;
+    background-color: #f6f5f5;
+}
+
+.sidebar {
+    height: 100vh;
+}
+
+.custom {
+    width: 100% !important;
+}
+
+.myContainer {
+    max-width: 250px;
+    padding: 15px;
+    margin: auto;
+}
+
+.form-group {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.form-control {
+    margin-bottom: 10px;
+}
+
+.text {
+    margin: 0 auto;
+}

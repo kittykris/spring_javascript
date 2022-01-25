@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    background-color: #f6f5f5;
+}
+
+.sidebar {
+    height: 100vh;
+}
+
+.custom {
+    width: 100% !important;
+}
