@@ -85,6 +85,7 @@ public class UserServiceImp implements UserService {
         User admin = new User("admin", "admin", (byte) 25, "admin", passwordEncoder.encode("admin"));
         Set<Role> adminSet = new HashSet<>();
         adminSet.add(roleService.findRoleByName("ADMIN"));
+        adminSet.add(roleService.findRoleByName("USER"));
         admin.setRoles(adminSet);
         userDao.addUser(admin);
     }
