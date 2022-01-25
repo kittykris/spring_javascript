@@ -109,22 +109,29 @@ async function addNewUser() {
             age: age,
             email: email,
             password: password,
-            // roles: [{
-            //     name: roles
-            // }]
+            roles: [{
+                name: roles
+            }]
         }
         const response = await userFetchService.addNewUser(data);
         if (response.status === 201) {
+            let alert = `<div class="alert alert-success alert-dismissible fade show col-12" role="alert">
+                            User successfully saved!
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>`;
+            addUserForm.prepend(alert);
             addUserForm.find('#AddNewUserFirstName').val('');
             addUserForm.find('#AddNewUserLastName').val('');
             addUserForm.find('#AddNewUserAge').val('');
             addUserForm.find('#AddNewUserEmail').val('');
             addUserForm.find('#AddNewUserPassword').val('');
+            addUserForm.find('#addRole').val();
             getTableWithUsers();
         } else {
-            let body = await response.json();
             let alert = `<div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
-                            ${body.info}
+                            Fields har errors!
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
