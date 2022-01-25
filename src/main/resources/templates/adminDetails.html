@@ -217,23 +217,15 @@
                     <div class="card">
                         <div class="card-header"><strong>About user</strong></div>
                         <div class="card-body p-3">
-                            <table class="table table-striped">
-                                <tr>
+                            <table class="table table-striped" id="userTable">
                                     <thead>
-                                    <th scope="row">Id:</th>
-                                    <th scope="row">Имя:</th>
-                                    <th scope="row">Фамилия:</th>
-                                    <th scope="row">Age:</th>
-                                    <th scope="row">Email:</th>
+                                        <th scope="row">Id</th>
+                                        <th scope="row">Имя</th>
+                                        <th scope="row">Фамилия</th>
+                                        <th scope="row">Age</th>
+                                        <th scope="row">Email</th>
                                     </thead>
-                                </tr>
-                                <tbody>
-                                <td th:text="${adminDetails.id}">Id:</td>
-                                <td th:text="${adminDetails.firstName}">First Name:</td>
-                                <td th:text="${adminDetails.lastName}">Last Name</td>
-                                <td th:text="${adminDetails.age}">Age</td>
-                                <td th:text="${adminDetails.email}">Email</td>
-                                </tbody>
+                                    <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -243,22 +235,18 @@
     </div>
 </div>
 
-<!--скрытое дефолтное модальное окно -->
+<!-- модальное окно -->
 <div class="modal fade" id="someDefaultModal" tabindex="-1" role="dialog" aria-labelledby="someDefaultModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
             <div class="modal-body myContainer p-3"></div>
-
             <div class="modal-footer"></div>
-
         </div>
     </div>
 </div>
