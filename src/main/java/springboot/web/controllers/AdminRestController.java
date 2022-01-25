@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/admin")
 public class AdminRestController {
 
     private final UserService userService;
@@ -45,7 +45,7 @@ public class AdminRestController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable("id") long id) {
-        if (user.getPassword() == null) {
+        if (user.getPassword().isEmpty()) {
             user.setPassword(userService.getUserById(id).getPassword());
         }
         user.setId(id);

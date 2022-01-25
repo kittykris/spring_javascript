@@ -12,21 +12,21 @@ const adminService = {
         'Content-Type': 'application/json',
         'Referer': null
     },
-    findAllUsers: async () => await fetch('api/users'),
-    findOneUser: async (id) => await fetch(`api/users/${id}`),
-    addNewUser: async (user) => await fetch('api/users', {
+    findAllUsers: async () => await fetch('api/admin'),
+    findOneUser: async (id) => await fetch(`api/admin/${id}`),
+    addNewUser: async (user) => await fetch('api/admin', {
         method: 'POST',
         headers: adminService.head,
         body: JSON.stringify(user)
     }),
-    updateUser: async (user, id) => await fetch(`api/users/${id}`, {
+    updateUser: async (user, id) => await fetch(`api/admin/${id}`, {
         method: 'PATCH',
         headers: adminService.head,
         body: JSON.stringify(user)
     }),
-    deleteUser: async (id) => await fetch(`api/users/${id}`, {method: 'DELETE', headers: adminService.head}),
-    getLoginedUser: async () => await fetch('api/users/details'),
-    getRoleSet: async () => await fetch('api/users/roles')
+    deleteUser: async (id) => await fetch(`api/admin/${id}`, {method: 'DELETE', headers: adminService.head}),
+    getLoginedUser: async () => await fetch('api/admin/details'),
+    getRoleSet: async () => await fetch('api/admin/roles')
 }
 
 function getUsersExistedRoles(set) {
