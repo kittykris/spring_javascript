@@ -36,7 +36,7 @@ public class AdminRestController {
     @PostMapping
     public ResponseEntity<User> addNewUser(@RequestBody User user) {
         userService.addUser(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
@@ -47,8 +47,8 @@ public class AdminRestController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable("id") long id) {
+    public ResponseEntity<User> deleteUser(@PathVariable("id") long id) {
         userService.deleteUser(id);
-        return "user with id " + id + " was deleted";
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
