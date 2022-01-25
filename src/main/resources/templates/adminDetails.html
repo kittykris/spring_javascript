@@ -156,11 +156,11 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="small text"><strong>Role</strong></label>
-                                                <select id="addRole" name="roles" class="form-control"
+                                                <select id="editRole" name="roles" class="form-control"
                                                         th:size="${allRoles.size()}" required>
                                                     <th:block th:each="role : ${allRoles}">
                                                         <option>
-                                                            <th:block th:text="${role.name}" th:value="${role.id}"/>
+                                                            <th:block th:text="${role.name}"/>
                                                         </option>
                                                     </th:block>
                                                 </select>
