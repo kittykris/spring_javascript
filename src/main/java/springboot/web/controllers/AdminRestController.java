@@ -3,11 +3,13 @@ package springboot.web.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springboot.web.model.User;
 import springboot.web.service.RoleService;
 import springboot.web.service.UserService;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -50,5 +52,10 @@ public class AdminRestController {
     public ResponseEntity<User> deleteUser(@PathVariable("id") long id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/details")
+    public User getLoginedUser(Principal principal) {
+        return (User) ((Authentication) principal).getPrincipal();
     }
 }
