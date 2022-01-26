@@ -111,16 +111,19 @@ async function addNewUser() {
         let age = addNewUserForm.find('#AddNewUserAge').val();
         let email = addNewUserForm.find('#AddNewUserEmail').val();
         let password = addNewUserForm.find('#AddNewUserPassword').val();
-        let roles = addNewUserForm.find('#addRole').val();
+        let selectedRoles = [];
+        for (let option of document.getElementById('addRole').options) {
+            if (option.selected) {
+                selectedRoles.push(option.value);
+            }
+        }
         let data = {
             firstName: firstName,
             lastName: lastName,
             age: age,
             email: email,
             password: password,
-            roles: [{
-                name: roles
-            }]
+            roles: selectedRoles
         }
         const response = await adminService.addNewUser(data);
         if (response.status === 201) {
@@ -200,7 +203,12 @@ async function editUser(modal, id) {
         let age = modal.find("#age").val();
         let email = modal.find("#email").val();
         let password = modal.find("#password").val();
-        let roles = modal.find('#role option:selected').val();
+        let selectedRoles = [];
+        for (let option of document.getElementById('role').options) {
+            if (option.selected) {
+                selectedRoles.push(option.value);
+            }
+        }
         let data = {
             id: id,
             firstName: firstName,
@@ -208,9 +216,7 @@ async function editUser(modal, id) {
             age: age,
             email: email,
             password: password,
-            roles: [{
-                name: roles
-            }]
+            roles: selectedRoles
         }
         const response = await adminService.updateUser(data, id);
 
